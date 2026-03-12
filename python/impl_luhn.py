@@ -1,25 +1,15 @@
 def verify_card_number(card_number: str):
-    if " " in card_number:
-        card_number = "".join(card_number.split(" "))
+    card_number = card_number.replace(" ", "").replace("-", "")
+    total = sum(
+        (2 * int(d) - 9)
+        if i % 2 and 2 * int(d) > 9
+        else (2 * int(d))
+        if i % 2
+        else int(d)
+        for i, d in enumerate(card_number[::-1])
+    )
 
-    if "-" in card_number:
-        card_number = "".join(card_number.split("-"))
-
-    sum = 0
-    for i, d in enumerate(card_number[::-1]):
-        if i % 2:
-            d = 2 * int(d)
-            if d > 9:
-                d -= 9
-        else:
-            d = int(d)
-        sum += d
-    print(sum)
-
-    if sum % 10:
-        return "INVALID!"
-    else:
-        return "VALID!"
+    return "VALID!" if not total % 10 else "INVALID!"
 
 
 print(verify_card_number("453914881"))
